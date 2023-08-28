@@ -1,1 +1,7 @@
 @import 'mapbox-gl/dist/mapbox-gl.css';
+@import url('./reset.css');
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
