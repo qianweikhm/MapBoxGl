@@ -90,11 +90,9 @@ onMounted(async () => {
   position: fixed;
   top: 0;
   left: 0;
-  background: #ccc;
   height: 100vh;
   z-index: 9;
   width: 400px;
-  box-shadow: 0 0 10px 4px #908f8f;
 }
 
 
