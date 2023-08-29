@@ -1,9 +1,10 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, reactive } from 'vue'
 import mapboxgl from 'mapbox-gl';
+import JsonData from './jsonData/banner.json'
 import MapboxLanguage from '@mapbox/mapbox-gl-language';
 mapboxgl.accessToken = 'pk.eyJ1IjoicWlhbndlaTQ1NiIsImEiOiJjbGl2OWtodXkwNjZiM25sbTg0NW50M2xwIn0.TltzkQ67djjdD6MjEg3Oeg';
-
+const BannerData = reactive(JsonData)
 const initMapBoxGl = () => {
   const map = new mapboxgl.Map({
     container: 'map',
@@ -13,6 +14,27 @@ const initMapBoxGl = () => {
   });
   const language = new MapboxLanguage({ defaultLanguage: 'zh-Hans' });
   map.addControl(language);
+
+
+  BannerData.forEach(ele => {
+    console.log('[ ele.lat ] >', ele.lat)
+  })
+  const popup = new mapboxgl.Popup({ offset: [0, -15] })
+    .setHTML(
+      `<h3>1</h3><p>2</p>`
+    )
+  let marker1 = new mapboxgl.Marker()
+    .setLngLat([104.477071, 34.920368])
+    .setPopup(popup)
+    .addTo(map);
+  // Create a default Marker, colored black, rotated 45 degrees.
+  let marker2 = new mapboxgl.Marker()
+    .setLngLat([108.524477, 33.883399])
+    .addTo(map);
+  map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+  map.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
+
+
 }
 const center = ref([])
 const getLocation = async () => {
@@ -20,6 +42,8 @@ const getLocation = async () => {
   let commits = await response.json();
   center.value = commits.rectangle.split(';')[0].split(',')
 }
+
+
 onMounted(async () => {
   await getLocation()
   initMapBoxGl()
@@ -33,22 +57,11 @@ onMounted(async () => {
   </div>
   <div id="main">
     <n-carousel class="carousel" direction="vertical" dot-placement="right" autoplay show-arrow>
-      <div class="carousel-img">
-        <img src="./assets/images/banner/Wutai_Foguang_Si_2013.08.28_11-21-32.jpg">
+      <div class="carousel-img" v-for="(item, index) in BannerData" :key="index">
+        <img :src="item.mainImg">
         <div class="carousel-detail">
-          <a href="#"><span>佛光寺</span>-大殿正面-山西省忻州市五台县豆村镇佛光村</a>
-        </div>
-      </div>
-      <div class="carousel-img">
-        <img src="./assets/images/banner/Wutai_Nanchan_Si_2013.08.28_13-43-47.jpg">
-        <div class="carousel-detail">
-          <a href="#"><span>南禅寺</span>-大殿正面-中国山西省忻州市五台县阳白乡李家庄村西北</a>
-        </div>
-      </div>
-      <div class="carousel-img">
-        <img src="./assets/images/banner/Wutai_Nanchan_Si_2013.08.28_13-43-47.jpg">
-        <div class="carousel-detail">
-          <a href="#"><span>鲁班坊</span>-大殿正面-江西省宜丰县花桥乡白市厚埠自然村</a>
+          <a href="#"><span>{{ item.name }}</span>-位于{{ item.address }}-始建于{{ item.year }}({{ item.dynasty }})-属于{{
+            item.type }}</a>
         </div>
       </div>
     </n-carousel>
@@ -110,14 +123,17 @@ onMounted(async () => {
     position: absolute;
     bottom: 0;
     left: 0;
-    height: 40px;
+    // height: 40px;
     width: 100%;
     background: rgba(0, 0, 0, .5);
     color: #fff;
     display: flex;
     align-items: center;
-    padding: 0 20px;
+    padding: 4px 20px;
+    padding-right: 40px;
     font-size: 12px;
+    box-sizing: border-box;
+    line-height: 20px;
 
     span {
       font-size: 16px;
