@@ -5,6 +5,7 @@ import JsonData from './jsonData/banner.json'
 import MapboxLanguage from '@mapbox/mapbox-gl-language';
 mapboxgl.accessToken = 'pk.eyJ1IjoicWlhbndlaTQ1NiIsImEiOiJjbGl2OWtodXkwNjZiM25sbTg0NW50M2xwIn0.TltzkQ67djjdD6MjEg3Oeg';
 const BannerData = reactive(JsonData)
+const infoObj = ref({})
 const initMapBoxGl = () => {
   const map = new mapboxgl.Map({
     container: 'map',
@@ -14,27 +15,21 @@ const initMapBoxGl = () => {
   });
   const language = new MapboxLanguage({ defaultLanguage: 'zh-Hans' });
   map.addControl(language);
-
-
   BannerData.forEach(ele => {
-    console.log('[ ele.lat ] >', ele.lat)
+    new mapboxgl.Marker()
+      .setLngLat([ele.lng, ele.lat])
+      .setPopup(new mapboxgl.Popup({ offset: [0, -15] })
+        .setHTML(
+          `<div onClick="showInfo(${ele.id})"><p class="htmlName">${ele.name}</p><p class='htmlTxt'>${ele.html}</p></div>`
+        ))
+      .addTo(map);
   })
-  const popup = new mapboxgl.Popup({ offset: [0, -15] })
-    .setHTML(
-      `<h3>1</h3><p>2</p>`
-    )
-  let marker1 = new mapboxgl.Marker()
-    .setLngLat([104.477071, 34.920368])
-    .setPopup(popup)
-    .addTo(map);
-  // Create a default Marker, colored black, rotated 45 degrees.
-  let marker2 = new mapboxgl.Marker()
-    .setLngLat([108.524477, 33.883399])
-    .addTo(map);
+  window.showInfo = (id) => {
+    const array = BannerData.filter(ele => ele.id == id)
+    infoObj.value = array[0]
+  }
   map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
   map.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
-
-
 }
 const center = ref([])
 const getLocation = async () => {
@@ -42,8 +37,6 @@ const getLocation = async () => {
   let commits = await response.json();
   center.value = commits.rectangle.split(';')[0].split(',')
 }
-
-
 onMounted(async () => {
   await getLocation()
   initMapBoxGl()
@@ -65,6 +58,9 @@ onMounted(async () => {
         </div>
       </div>
     </n-carousel>
+    <div class="info" v-if="infoObj.id">
+      <div class="info-title">{{ infoObj.name }}</div>
+    </div>
   </div>
 </template>
 
@@ -106,6 +102,22 @@ onMounted(async () => {
   height: 100vh;
   z-index: 9;
   width: 400px;
+}
+
+.info {
+  width: 100%;
+  height: calc(100% - 240px);
+  border: 1px solid #000;
+
+  .info-title {
+    width: 100%;
+    height: 30px;
+    background: #FFCC99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
 }
 
 
