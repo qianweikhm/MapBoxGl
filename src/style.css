@@ -7,7 +7,7 @@
 }
 
 * {
-  font-family: aoyagireisyosimo;
+  /* font-family: aoyagireisyosimo; */
 }
 
 a {
@@ -27,6 +27,7 @@ a {
 .htmlTxt {
   font-size: 16px;
   line-height: 20px;
+  text-indent: 2em;
 }
 
 .htmlName {
@@ -36,4 +37,8 @@ a {
   color: rgb(8, 95, 47);
   font-weight: bold;
   cursor: pointer;
+}
+
+.markerTxt {
+  color: #333;
 }

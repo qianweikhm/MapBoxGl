@@ -3,6 +3,7 @@ import { onMounted, ref, reactive } from 'vue'
 import mapboxgl from 'mapbox-gl';
 import JsonData from './jsonData/banner.json'
 import MapboxLanguage from '@mapbox/mapbox-gl-language';
+import Viewer from 'viewerjs';
 mapboxgl.accessToken = 'pk.eyJ1IjoicWlhbndlaTQ1NiIsImEiOiJjbGl2OWtodXkwNjZiM25sbTg0NW50M2xwIn0.TltzkQ67djjdD6MjEg3Oeg';
 const BannerData = reactive(JsonData)
 const infoObj = ref({})
@@ -23,10 +24,18 @@ const initMapBoxGl = () => {
           `<div onClick="showInfo(${ele.id})"><p class="htmlName">${ele.name}</p><p class='htmlTxt'>${ele.html}</p></div>`
         ))
       .addTo(map);
+    var el = document.createElement('div')
+    el.setAttribute('class', 'markerTxt')
+    el.innerHTML = `${ele.name}`
+    new mapboxgl.Marker(el, { offset: [0, 10] })
+      .setLngLat([ele.lng, ele.lat])
+      .addTo(map);
   })
   window.showInfo = (id) => {
     const array = BannerData.filter(ele => ele.id == id)
     infoObj.value = array[0]
+
+
   }
   map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
   map.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
@@ -60,6 +69,38 @@ onMounted(async () => {
     </n-carousel>
     <div class="info" v-if="infoObj.id">
       <div class="info-title">{{ infoObj.name }}</div>
+      <div class="info-content">
+        <div class="info-content-title">画廊</div>
+        <div class="info-content-box" v-viewer>
+          <n-carousel :slides-per-view="4" :space-between="10" :loop="true" autoplay show-arrow draggable>
+            <img v-for="(src, index) in infoObj.gallery" @click="preview(src)" :key="index"
+              style="border-radius: 2px;margin:0 4px 4px 0;object-fit: cover;" width="100" height="100" :src="src" />
+          </n-carousel>
+        </div>
+        <div class="info-content-title">基本信息</div>
+        <div class="info-content-box">
+          <n-descriptions label-placement="left" column="1" title="">
+            <n-descriptions-item>
+              <template #label>
+                地址
+              </template>
+              {{ infoObj.address }}
+            </n-descriptions-item>
+            <n-descriptions-item>
+              <template #label>
+                年份
+              </template>
+              公元{{ infoObj.year }}，{{ infoObj.dynasty }}
+            </n-descriptions-item>
+            <n-descriptions-item>
+              <template #label>
+                数据来源
+              </template>
+              {{ infoObj.source }}
+            </n-descriptions-item>
+          </n-descriptions>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -106,8 +147,13 @@ onMounted(async () => {
 
 .info {
   width: 100%;
-  height: calc(100% - 240px);
-  border: 1px solid #000;
+  height: calc(100% - 300px);
+  background: #fff;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .info-title {
     width: 100%;
@@ -116,7 +162,17 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
+    font-size: 22px;
+  }
+
+  .info-content {
+    padding: 0 10px 10px 10px;
+
+    .info-content-title {
+      color: #cc6a07;
+      padding-bottom: 10px;
+      padding-top: 10px;
+    }
   }
 }
 

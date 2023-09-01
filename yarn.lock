@@ -717,6 +717,14 @@ treemate@^0.3.11:
   resolved "https://registry.yarnpkg.com/treemate/-/treemate-0.3.11.tgz#7d52f8f69ab9ce326f8d139e0a3d1ffb25e48222"
   integrity sha512-M8RGFoKtZ8dF+iwJfAJTOH/SM4KluKOKRJpjCMhI8bG3qB74zrFoArKZ62ll0Fr3mqkMJiQOmWYkdYgDeITYQg==
 
+v-viewer@^3.0.11:
+  version "3.0.11"
+  resolved "https://registry.yarnpkg.com/v-viewer/-/v-viewer-3.0.11.tgz#c03855eb56436bd0f5323c34a61c10fa8fd05026"
+  integrity sha512-E8LOdAxhzuktt4HB3PswVCccQ1Q1sYHYnLsS6zaJISpb5EvmAFs5sYNfXnDLFxVb5DQ82v4ZlGxkYlseXwWRJw==
+  dependencies:
+    lodash "^4.17.21"
+    viewerjs "^1.9.0"
+
 vdirs@^0.1.4, vdirs@^0.1.8:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/vdirs/-/vdirs-0.1.8.tgz#a103bc43baca738f8dea912a7e9737154a19dbc2"
@@ -728,6 +736,11 @@ vfonts@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/vfonts/-/vfonts-0.0.3.tgz#999d66fecea18efee3f2b966c81101ae8ce01a29"
   integrity sha512-nguyw8L6Un8eelg1vQ31vIU2ESxqid7EYmy8V+MDeMaHBqaRSkg3dTBToC1PR00D89UzS/SLkfYPnx0Wf23IQQ==
+
+viewerjs@^1.11.5, viewerjs@^1.9.0:
+  version "1.11.5"
+  resolved "https://registry.yarnpkg.com/viewerjs/-/viewerjs-1.11.5.tgz#01228f383abd6febb04ab1bae26a6592fb2e4f15"
+  integrity sha512-nsvQkC5jnqZ/2ggFYWUH5gpUGPtFAYidsFh8Q7B7sioAdqJzSJrELvbu9ozUm0W+A2uHN5XuuiheHHB+dWiPEA==
 
 vite@^4.4.5:
   version "4.4.9"
